@@ -17,3 +17,5 @@ venv/
 synthetic-data/generated/
 storage/
 uploads/
+
+*.egg-info/
