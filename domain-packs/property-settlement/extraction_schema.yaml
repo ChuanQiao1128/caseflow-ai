@@ -1,0 +1,45 @@
+domain: property_settlement
+
+fields:
+  agreement:
+    - buyer_names
+    - seller_names
+    - property_address
+    - title_type
+    - purchase_price
+    - deposit
+    - settlement_date
+    - finance_condition_due
+    - lim_condition_due
+    - building_inspection_condition_due
+    - special_conditions
+
+  loan:
+    - lender_name
+    - borrower_names
+    - loan_amount
+    - guarantor_names
+    - signature_status
+    - special_lender_conditions
+
+  insurance:
+    - insured_party
+    - property_address
+    - policy_start_date
+    - policy_end_date
+    - cover_status
+
+  identity:
+    - document_holder_name
+    - document_type
+    - expiry_date
+    - address
+    - issue_country
+
+  trust:
+    - trust_name
+    - trustees
+    - beneficiaries
+    - deed_date
+    - variation_dates
+    - signing_parties

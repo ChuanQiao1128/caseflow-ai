@@ -1,0 +1,52 @@
+domain: property_settlement
+
+checklists:
+  buyer_purchase_mortgage:
+    - sale_and_purchase_agreement_found
+    - buyer_names_extracted
+    - property_address_extracted
+    - purchase_price_extracted
+    - settlement_date_extracted
+    - finance_condition_checked
+    - buyer_identity_documents_found
+    - proof_of_address_found
+    - loan_pack_received
+    - insurance_certificate_received
+    - insurance_starts_on_or_before_settlement
+    - gifted_funds_evidence_checked
+    - missing_items_email_drafted
+    - human_review_required
+
+  vendor_sale_discharge:
+    - sale_and_purchase_agreement_found
+    - vendor_names_extracted
+    - property_address_extracted
+    - sale_price_extracted
+    - settlement_date_extracted
+    - vendor_identity_documents_found
+    - mortgage_statement_found
+    - discharge_authority_found
+    - settlement_statement_found
+    - rates_or_apportionments_checked
+    - missing_items_email_drafted
+    - human_review_required
+
+  trust_buyer_cdd:
+    - trust_deed_found
+    - trustees_identified
+    - trustee_identity_documents_found
+    - proof_of_address_for_trustees_found
+    - deed_of_variation_checked
+    - trustee_resolution_checked
+    - beneficiary_information_checked
+    - source_of_funds_or_wealth_evidence_checked
+    - human_review_required
+
+  trust_vendor_cdd:
+    - trust_deed_found
+    - trustees_identified
+    - trustee_identity_documents_found
+    - deed_of_variation_checked
+    - discharge_authority_signed_by_required_parties
+    - beneficiary_or_deed_variation_issues_flagged
+    - human_review_required

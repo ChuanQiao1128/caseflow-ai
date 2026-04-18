@@ -1,0 +1,23 @@
+domain: property_settlement
+
+document_types:
+  - sale_and_purchase_agreement
+  - record_of_title
+  - lim_report
+  - passport
+  - driver_licence
+  - proof_of_address
+  - bank_loan_pack
+  - insurance_certificate
+  - gifted_funds_letter
+  - bank_statement
+  - settlement_statement
+  - mortgage_statement
+  - discharge_authority
+  - trust_deed
+  - deed_of_variation
+  - trustee_resolution
+  - accountant_letter
+  - agent_email
+  - client_email
+  - unknown
