@@ -2,6 +2,7 @@ from fastapi import FastAPI
 
 from caseflow_api.api.routers import (
     checklists_router,
+    email_drafts_router,
     extraction_router,
     health_router,
     organisations_router,
@@ -20,6 +21,7 @@ def create_app() -> FastAPI:
     app.include_router(extraction_router)
     app.include_router(checklists_router)
     app.include_router(review_router)
+    app.include_router(email_drafts_router)
     return app
 
 

@@ -159,3 +159,16 @@ class ReviewDecisionRead(BaseModel):
     extracted_fields: list[ExtractedFieldRead] = Field(default_factory=list)
     checklist_findings: list[ChecklistFindingRead] = Field(default_factory=list)
     boundedness: ReviewBoundednessRead = Field(default_factory=ReviewBoundednessRead)
+
+
+class FollowUpEmailDraftRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    matter_id: UUID
+    subject: str
+    body: str
+    status: Literal["draft_only", "needs_human_review", "ready_for_manual_review"] = "draft_only"
+    disclaimer: str = (
+        "This is a draft email only and must be reviewed and approved by a human before sending. "
+        "It does not send anything automatically."
+    )
