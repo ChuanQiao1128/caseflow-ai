@@ -1,6 +1,14 @@
-import type { MatterDemo, WorkflowStep } from '../data/demo-data';
+import type { WorkflowStep } from '../data/demo-data';
 
-export function MatterWorkflowCard({ matter, steps }: { matter: MatterDemo; steps: WorkflowStep[] }) {
+export type MatterCardData = {
+  title: string;
+  organisation: string;
+  type: string;
+  status: string;
+  settlementDate: string;
+};
+
+export function MatterWorkflowCard({ matter, steps }: { matter: MatterCardData; steps: WorkflowStep[] }) {
   return (
     <section className="panel">
       <div className="panel-header">

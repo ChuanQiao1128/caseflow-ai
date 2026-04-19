@@ -7,6 +7,7 @@ export type MatterDemo = {
   settlementDate: string;
   client: string;
   lastUpdated: string;
+  reference: string | null;
 };
 
 export type WorkflowStep = {
@@ -49,6 +50,7 @@ export type ApprovalQueueItemDemo = {
   reason: string;
   status: 'pending' | 'needs_changes' | 'approved';
   updatedAt: string;
+  reviewerNotes?: string | null;
 };
 
 export type DocumentDemo = {
@@ -56,6 +58,15 @@ export type DocumentDemo = {
   name: string;
   pages: string;
   tag: string;
+};
+
+export type AuditLogDemo = {
+  id: string;
+  action: string;
+  entityType: string;
+  entityId: string;
+  details: string;
+  createdAt: string;
 };
 
 export const demoMatter: MatterDemo = {
@@ -66,7 +77,8 @@ export const demoMatter: MatterDemo = {
   status: 'Needs human review',
   settlementDate: '14 May 2026',
   client: 'Ngata Family',
-  lastUpdated: 'Updated 8 minutes ago'
+  lastUpdated: 'Updated 8 minutes ago',
+  reference: 'DEMO-001'
 };
 
 export const demoWorkflowSteps: WorkflowStep[] = [
@@ -167,7 +179,8 @@ export const demoQueueItems: ApprovalQueueItemDemo[] = [
     context: 'Draft email to request a current proof of address for each buyer.',
     reason: 'No recent utility bill or bank statement was found in the synthetic pack.',
     status: 'pending',
-    updatedAt: 'Updated 5 minutes ago'
+    updatedAt: 'Updated 5 minutes ago',
+    reviewerNotes: null
   },
   {
     id: 'aq-002',
@@ -176,7 +189,8 @@ export const demoQueueItems: ApprovalQueueItemDemo[] = [
     context: 'Draft email to confirm cover begins on or before settlement.',
     reason: 'The policy start date is after settlement in this demo dataset.',
     status: 'needs_changes',
-    updatedAt: 'Updated 12 minutes ago'
+    updatedAt: 'Updated 12 minutes ago',
+    reviewerNotes: 'Tighten the wording before sending.'
   },
   {
     id: 'aq-003',
@@ -185,7 +199,8 @@ export const demoQueueItems: ApprovalQueueItemDemo[] = [
     context: 'Draft email to request donor identification for gifted funds.',
     reason: 'The source-of-funds pack is missing donor identification details.',
     status: 'pending',
-    updatedAt: 'Updated 20 minutes ago'
+    updatedAt: 'Updated 20 minutes ago',
+    reviewerNotes: null
   }
 ];
 
@@ -193,6 +208,33 @@ export const demoDocuments: DocumentDemo[] = [
   { id: 'doc-1', name: 'Sale & Purchase Agreement', pages: '8 pages', tag: 'Contract' },
   { id: 'doc-2', name: 'Loan Offer Letter', pages: '6 pages', tag: 'Mortgage' },
   { id: 'doc-3', name: 'Compliance pack', pages: '10 pages', tag: 'CDD' }
+];
+
+export const demoAuditLogs: AuditLogDemo[] = [
+  {
+    id: 'log-1',
+    action: 'matter.created',
+    entityType: 'matter',
+    entityId: demoMatter.id,
+    details: 'Matter created for synthetic demo flow.',
+    createdAt: 'Updated 2 hours ago'
+  },
+  {
+    id: 'log-2',
+    action: 'document.registered',
+    entityType: 'document',
+    entityId: 'doc-1',
+    details: 'Registered sale and purchase agreement for review.',
+    createdAt: 'Updated 1 hour ago'
+  },
+  {
+    id: 'log-3',
+    action: 'approval_queue.created',
+    entityType: 'approval_queue_item',
+    entityId: 'aq-001',
+    details: 'Created follow-up email draft requiring human approval.',
+    createdAt: 'Updated 5 minutes ago'
+  }
 ];
 
 export const demoMetrics = [

@@ -24,6 +24,12 @@ export function ApprovalQueueCard({ items, compact = false }: { items: ApprovalQ
             <div className="queue-item-body">
               <span className="label">Reason</span>
               <p>{item.reason}</p>
+              {item.reviewerNotes ? (
+                <p className="queue-note">
+                  <span className="label">Reviewer note</span>
+                  {item.reviewerNotes}
+                </p>
+              ) : null}
             </div>
             <div className="queue-item-foot">
               <span className="queue-id">{item.matterId}</span>
