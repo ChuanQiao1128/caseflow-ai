@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ApprovalQueueCard } from '../components/approval-queue-card';
+import { DemoWalkthroughCard } from '../components/demo-walkthrough-card';
 import { MatterWorkflowCard } from '../components/matter-workflow-card';
 import { StatCard } from '../components/stat-card';
 import { demoMatter, demoQueueItems, demoWorkflowSteps, demoMetrics } from '../data/demo-data';
@@ -53,6 +54,8 @@ export default function HomePage() {
         <MatterWorkflowCard matter={demoMatter} steps={demoWorkflowSteps} />
         <ApprovalQueueCard items={demoQueueItems} />
       </section>
+
+      <DemoWalkthroughCard />
 
       <section className="panel panel-banner">
         <div>

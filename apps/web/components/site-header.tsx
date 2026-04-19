@@ -13,8 +13,10 @@ export function SiteHeader() {
 
       <nav className="site-nav" aria-label="Primary">
         <Link href="/">Overview</Link>
+        <Link href="/matters">Matters</Link>
         <Link href="/matters/matter-001">Matter detail</Link>
         <Link href="/queue">Approval queue</Link>
+        <Link href="/demo-runbook">Runbook</Link>
       </nav>
     </header>
   );
