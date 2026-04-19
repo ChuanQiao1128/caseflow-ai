@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class OrganisationCreate(BaseModel):
@@ -93,3 +94,43 @@ class MatterSearchResponse(BaseModel):
     confidence: str
     has_evidence: bool
     message: str | None = None
+
+
+class ExtractedFieldRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    field_name: str
+    value: str | None = None
+    confidence: float = Field(ge=0.0, le=1.0)
+    citation: str
+
+
+class MatterExtractionResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    matter_id: UUID
+    extracted_fields: list[ExtractedFieldRead] = Field(default_factory=list)
+
+
+class ChecklistFindingRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    item_name: str
+    status: Literal["pass", "fail", "unclear"]
+    citation: str | None = None
+    reason: str | None = None
+
+    @model_validator(mode="after")
+    def validate_unclear_reason_and_citation(self) -> "ChecklistFindingRead":
+        if self.status == "unclear" and not self.reason:
+            raise ValueError("unclear findings require a reason")
+        if self.status == "unclear" and not self.citation:
+            raise ValueError("unclear findings require a citation")
+        return self
+
+
+class ChecklistResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    matter_id: UUID
+    findings: list[ChecklistFindingRead] = Field(default_factory=list)

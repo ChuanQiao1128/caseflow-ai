@@ -21,6 +21,7 @@ venv/
 synthetic-data/generated/
 storage/
 uploads/
+.hermes/
 
 *.egg-info/
 **/*.egg-info/
