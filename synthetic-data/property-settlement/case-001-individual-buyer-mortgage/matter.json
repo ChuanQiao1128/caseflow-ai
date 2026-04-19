@@ -1,0 +1,18 @@
+{
+  "disclaimer": "SYNTHETIC DEMO DATA — NOT REAL CLIENT DATA",
+  "case_id": "case-001-individual-buyer-mortgage",
+  "matter_title": "Pukekohe Purchase for the Ngata Family",
+  "matter_type": "individual_buyer_mortgage",
+  "organisation_name": "Kauri Coast Legal",
+  "client": {
+    "buyer_names": [
+      "Aroha Ngata",
+      "Tane Ngata"
+    ],
+    "property_address": "18 Kōwhai Rise, Pukekohe 2120",
+    "purchase_price_nzd": 895000,
+    "deposit_nzd": 89500,
+    "settlement_date": "2026-05-14",
+    "lender_name": "Harbour Bank"
+  }
+}

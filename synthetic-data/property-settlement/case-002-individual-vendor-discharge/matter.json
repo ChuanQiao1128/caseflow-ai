@@ -1,0 +1,16 @@
+{
+  "disclaimer": "SYNTHETIC DEMO DATA — NOT REAL CLIENT DATA",
+  "case_id": "case-002-individual-vendor-discharge",
+  "matter_title": "Papakura Vendor Sale and Mortgage Discharge",
+  "matter_type": "individual_vendor_discharge",
+  "organisation_name": "Southgate Conveyancing",
+  "client": {
+    "vendor_names": [
+      "Mereana Wilson"
+    ],
+    "property_address": "4 Rimu Grove, Papakura 2110",
+    "sale_price_nzd": 1125000,
+    "settlement_date": "2026-06-02",
+    "lender_name": "North Star Home Loans"
+  }
+}

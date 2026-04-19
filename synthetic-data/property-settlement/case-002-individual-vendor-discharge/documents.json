@@ -1,0 +1,40 @@
+{
+  "disclaimer": "SYNTHETIC DEMO DATA — NOT REAL CLIENT DATA",
+  "documents": [
+    {
+      "document_id": "doc-001",
+      "filename": "signed-agreement.pdf",
+      "document_type": "sale_and_purchase_agreement",
+      "pages": 10,
+      "notes": "Standard sale with six-week settlement."
+    },
+    {
+      "document_id": "doc-002",
+      "filename": "title-search.pdf",
+      "document_type": "record_of_title",
+      "pages": 3,
+      "notes": "Mortgage to North Star Home Loans remains registered."
+    },
+    {
+      "document_id": "doc-003",
+      "filename": "vendor-id.pdf",
+      "document_type": "driver_licence",
+      "pages": 3,
+      "notes": "Identity documents present for vendor."
+    },
+    {
+      "document_id": "doc-004",
+      "filename": "mortgage-statement.pdf",
+      "document_type": "mortgage_statement",
+      "pages": 8,
+      "notes": "Final balance statement attached."
+    },
+    {
+      "document_id": "doc-005",
+      "filename": "discharge-instructions-email.pdf",
+      "document_type": "agent_email",
+      "pages": 2,
+      "notes": "Email asks bank to prepare discharge but authority wording is not explicit."
+    }
+  ]
+}

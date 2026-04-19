@@ -1,0 +1,40 @@
+{
+  "disclaimer": "SYNTHETIC DEMO DATA — NOT REAL CLIENT DATA",
+  "documents": [
+    {
+      "document_id": "doc-001",
+      "filename": "trust-deed.pdf",
+      "document_type": "trust_deed",
+      "pages": 16,
+      "notes": "Executed trust deed dated 2020-03-12."
+    },
+    {
+      "document_id": "doc-002",
+      "filename": "deed-of-variation.pdf",
+      "document_type": "deed_of_variation",
+      "pages": 5,
+      "notes": "Variation dated 2024-09-01 removes trustee Liam Mason from signing authority."
+    },
+    {
+      "document_id": "doc-003",
+      "filename": "trustee-id-pack.pdf",
+      "document_type": "passport",
+      "pages": 7,
+      "notes": "ID evidence for both trustees; proof of address missing for Liam Mason."
+    },
+    {
+      "document_id": "doc-004",
+      "filename": "loan-pack.pdf",
+      "document_type": "bank_loan_pack",
+      "pages": 20,
+      "notes": "Trust lending approval with AML/CDD notes."
+    },
+    {
+      "document_id": "doc-005",
+      "filename": "trustee-resolution.pdf",
+      "document_type": "trustee_resolution",
+      "pages": 2,
+      "notes": "Resolution references both trustees despite deed variation removing one signer."
+    }
+  ]
+}

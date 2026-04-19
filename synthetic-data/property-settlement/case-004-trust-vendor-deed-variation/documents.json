@@ -1,0 +1,40 @@
+{
+  "disclaimer": "SYNTHETIC DEMO DATA — NOT REAL CLIENT DATA",
+  "documents": [
+    {
+      "document_id": "doc-001",
+      "filename": "trust-deed.pdf",
+      "document_type": "trust_deed",
+      "pages": 14,
+      "notes": "Original trust deed dated 2018-11-08."
+    },
+    {
+      "document_id": "doc-002",
+      "filename": "deed-of-variation.pdf",
+      "document_type": "deed_of_variation",
+      "pages": 4,
+      "notes": "Variation dated 2025-02-14 updates trustee appointment and signing powers."
+    },
+    {
+      "document_id": "doc-003",
+      "filename": "title-search.pdf",
+      "document_type": "record_of_title",
+      "pages": 4,
+      "notes": "Mortgage to Cobalt Lending remains registered."
+    },
+    {
+      "document_id": "doc-004",
+      "filename": "discharge-authority-draft.pdf",
+      "document_type": "discharge_authority",
+      "pages": 2,
+      "notes": "Draft authority prepared but unsigned."
+    },
+    {
+      "document_id": "doc-005",
+      "filename": "trustee-id-pack.pdf",
+      "document_type": "passport",
+      "pages": 5,
+      "notes": "Identity packs included; one trustee signature page is missing from the execution set."
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "disclaimer": "SYNTHETIC DEMO DATA — NOT REAL CLIENT DATA",
+  "case_id": "case-004-trust-vendor-deed-variation",
+  "matter_title": "Remuera Trust Sale with Deed Variation Review",
+  "matter_type": "trust_vendor_deed_variation",
+  "expected_missing_items": [
+    "Trust deed / deed variation documents are inconsistent on signing powers",
+    "Trustee signature is missing from the discharge authority execution set",
+    "Mortgage discharge authority remains unsigned and unclear"
+  ],
+  "expected_flags": [
+    "trust_deed_variation_inconsistency",
+    "trustee_signature_missing",
+    "discharge_authority_unsigned"
+  ]
+}

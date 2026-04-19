@@ -1,0 +1,10 @@
+{
+  "disclaimer": "SYNTHETIC DEMO DATA — NOT REAL CLIENT DATA",
+  "case_id": "case-001-individual-buyer-mortgage",
+  "questions": [
+    "Is there a current proof of address for each buyer?",
+    "Does the insurance policy begin on or before settlement?",
+    "Who is the donor of the gifted funds and is their ID on file?",
+    "Are the loan conditions otherwise satisfied for settlement?"
+  ]
+}

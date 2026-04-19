@@ -1,0 +1,9 @@
+{
+  "disclaimer": "SYNTHETIC DEMO DATA — NOT REAL CLIENT DATA",
+  "case_id": "case-002-individual-vendor-discharge",
+  "questions": [
+    "Is there a clear signed discharge authority for the lender?",
+    "Does the mortgage statement match the title and settlement details?",
+    "Are any additional vendor approvals needed before requesting discharge?"
+  ]
+}

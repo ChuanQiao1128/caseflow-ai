@@ -1,0 +1,18 @@
+{
+  "disclaimer": "SYNTHETIC DEMO DATA — NOT REAL CLIENT DATA",
+  "case_id": "case-003-trust-buyer-mortgage-cdd",
+  "matter_title": "Albany Trust Purchase with CDD Review",
+  "matter_type": "trust_buyer_mortgage_cdd",
+  "organisation_name": "Harbour & Fern Law",
+  "client": {
+    "trust_name": "Mason Family Trust",
+    "trustees": [
+      "Grace Mason",
+      "Liam Mason"
+    ],
+    "property_address": "22 Tōtara Avenue, Albany 0632",
+    "purchase_price_nzd": 1420000,
+    "settlement_date": "2026-07-18",
+    "lender_name": "Aotearoa Mortgage Co"
+  }
+}
