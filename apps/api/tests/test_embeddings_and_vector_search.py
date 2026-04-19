@@ -23,10 +23,7 @@ from caseflow_api.retrieval.service import search_matter_evidence
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 CASE_DIR = (
-    REPO_ROOT
-    / "synthetic-data"
-    / "property-settlement"
-    / "case-001-individual-buyer-mortgage"
+    REPO_ROOT / "synthetic-data" / "property-settlement" / "case-001-individual-buyer-mortgage"
 )
 CASEFLOW_TEST_DATABASE_URL = os.getenv("CASEFLOW_TEST_DATABASE_URL")
 
@@ -72,8 +69,7 @@ def test_prepare_synthetic_chunk_records_uses_local_embeddings() -> None:
 
     assert records
     assert all(
-        record.embedding is not None
-        and len(record.embedding) == EMBEDDING_DIMENSION
+        record.embedding is not None and len(record.embedding) == EMBEDDING_DIMENSION
         for record in records
     )
     assert all(isinstance(value, float) for record in records for value in record.embedding)

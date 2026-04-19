@@ -18,7 +18,6 @@ branch_labels: Sequence[str] | None = None
 depends_on: Sequence[str] | None = None
 
 
-
 def upgrade() -> None:
     op.add_column(
         "audit_logs",
@@ -33,7 +32,6 @@ def upgrade() -> None:
         ondelete="CASCADE",
     )
     op.create_index("ix_audit_logs_matter_id", "audit_logs", ["matter_id"], unique=False)
-
 
 
 def downgrade() -> None:

@@ -84,9 +84,7 @@ def create_matter(organisation_id: UUID, payload: MatterCreate, db: DBSession) -
 @router.get("/organisations/{organisation_id}/matters", response_model=list[MatterRead])
 def list_matters(organisation_id: UUID, db: DBSession) -> list[Matter]:
     statement = (
-        select(Matter)
-        .where(Matter.organisation_id == organisation_id)
-        .order_by(Matter.created_at)
+        select(Matter).where(Matter.organisation_id == organisation_id).order_by(Matter.created_at)
     )
     return list(db.scalars(statement).all())
 
@@ -156,10 +154,15 @@ def create_document(
     response_model=list[DocumentRead],
 )
 def list_documents(organisation_id: UUID, matter_id: UUID, db: DBSession) -> list[Document]:
-    statement = select(Document).join(Matter).where(
-        Matter.id == matter_id,
-        Matter.organisation_id == organisation_id,
-    ).order_by(Document.created_at)
+    statement = (
+        select(Document)
+        .join(Matter)
+        .where(
+            Matter.id == matter_id,
+            Matter.organisation_id == organisation_id,
+        )
+        .order_by(Document.created_at)
+    )
     return list(db.scalars(statement).all())
 
 

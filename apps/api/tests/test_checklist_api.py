@@ -4,7 +4,7 @@ from uuid import UUID
 
 from fastapi.testclient import TestClient
 
-from caseflow_api.api.schemas import ChecklistFindingRead, ChecklistResponse, ExtractedFieldRead
+from caseflow_api.api.schemas import ExtractedFieldRead
 
 ORG_ID = UUID("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
 MATTER_ID = UUID("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb")
@@ -27,17 +27,40 @@ def test_checklist_endpoint_returns_deterministic_findings(client: TestClient, m
         captured["organisation_id"] = organisation_id
         captured["matter_id"] = matter_id
         captured["field_specs"] = field_specs
-        return type("Response", (), {
-            "matter_id": matter_id,
-            "extracted_fields": [
-                ExtractedFieldRead(field_name="party_role", value="buyer", confidence=1.0, citation="Page 1"),
-                ExtractedFieldRead(field_name="transaction_type", value="purchase", confidence=1.0, citation="Page 1"),
-                ExtractedFieldRead(field_name="finance_type", value="mortgage", confidence=1.0, citation="Page 2"),
-                ExtractedFieldRead(field_name="lender_evidence", value="ANZ pre-approval letter", confidence=0.9, citation="Page 8"),
-            ],
-        })()
+        return type(
+            "Response",
+            (),
+            {
+                "matter_id": matter_id,
+                "extracted_fields": [
+                    ExtractedFieldRead(
+                        field_name="party_role", value="buyer", confidence=1.0, citation="Page 1"
+                    ),
+                    ExtractedFieldRead(
+                        field_name="transaction_type",
+                        value="purchase",
+                        confidence=1.0,
+                        citation="Page 1",
+                    ),
+                    ExtractedFieldRead(
+                        field_name="finance_type",
+                        value="mortgage",
+                        confidence=1.0,
+                        citation="Page 2",
+                    ),
+                    ExtractedFieldRead(
+                        field_name="lender_evidence",
+                        value="ANZ pre-approval letter",
+                        confidence=0.9,
+                        citation="Page 8",
+                    ),
+                ],
+            },
+        )()
 
-    monkeypatch.setattr("caseflow_api.api.routers.checklists.extract_matter_fields", fake_extract_matter_fields)
+    monkeypatch.setattr(
+        "caseflow_api.api.routers.checklists.extract_matter_fields", fake_extract_matter_fields
+    )
 
     response = client.post(f"/organisations/{org['id']}/matters/{matter['id']}/checklist")
 
@@ -53,20 +76,40 @@ def test_checklist_endpoint_returns_deterministic_findings(client: TestClient, m
     assert finding["citation"] == "Page 8"
 
 
-def test_checklist_endpoint_returns_unclear_when_required_evidence_missing(client: TestClient, monkeypatch) -> None:
+def test_checklist_endpoint_returns_unclear_when_required_evidence_missing(
+    client: TestClient, monkeypatch
+) -> None:
     org, matter = _create_org_matter(client, "Beta Law", "Matter B")
 
     def fake_extract_matter_fields(*, db, organisation_id, matter_id, field_specs):
-        return type("Response", (), {
-            "matter_id": matter_id,
-            "extracted_fields": [
-                ExtractedFieldRead(field_name="party_role", value="buyer", confidence=1.0, citation="Page 1"),
-                ExtractedFieldRead(field_name="transaction_type", value="purchase", confidence=1.0, citation="Page 1"),
-                ExtractedFieldRead(field_name="finance_type", value="mortgage", confidence=1.0, citation="Page 2"),
-            ],
-        })()
+        return type(
+            "Response",
+            (),
+            {
+                "matter_id": matter_id,
+                "extracted_fields": [
+                    ExtractedFieldRead(
+                        field_name="party_role", value="buyer", confidence=1.0, citation="Page 1"
+                    ),
+                    ExtractedFieldRead(
+                        field_name="transaction_type",
+                        value="purchase",
+                        confidence=1.0,
+                        citation="Page 1",
+                    ),
+                    ExtractedFieldRead(
+                        field_name="finance_type",
+                        value="mortgage",
+                        confidence=1.0,
+                        citation="Page 2",
+                    ),
+                ],
+            },
+        )()
 
-    monkeypatch.setattr("caseflow_api.api.routers.checklists.extract_matter_fields", fake_extract_matter_fields)
+    monkeypatch.setattr(
+        "caseflow_api.api.routers.checklists.extract_matter_fields", fake_extract_matter_fields
+    )
 
     response = client.post(f"/organisations/{org['id']}/matters/{matter['id']}/checklist")
 

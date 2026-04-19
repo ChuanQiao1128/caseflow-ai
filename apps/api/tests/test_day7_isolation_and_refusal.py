@@ -108,7 +108,9 @@ def test_checklist_rules_do_not_pass_when_evidence_is_absent(
     assert response.status_code == 200
     payload = response.json()
     finding = next(
-        item for item in payload["findings"] if item["item_name"] == "buyer_purchase_with_mortgage_requires_lender_evidence"
+        item
+        for item in payload["findings"]
+        if item["item_name"] == "buyer_purchase_with_mortgage_requires_lender_evidence"
     )
     assert finding["status"] == "unclear"
     assert finding["reason"] == "Mortgage is indicated, but lender evidence was not found"

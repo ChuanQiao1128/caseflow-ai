@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from uuid import UUID
 
@@ -9,7 +10,7 @@ from caseflow_api.api.schemas import ChecklistFindingRead, ChecklistResponse, Ex
 @dataclass(frozen=True, slots=True)
 class ChecklistRule:
     item_name: str
-    applies: callable
+    applies: Callable[[dict[str, ExtractedFieldRead | None]], bool]
     evidence_field: str
     reason_present: str
     reason_missing: str
@@ -20,7 +21,7 @@ def _normalize(value: str | None) -> str:
     return value.strip().lower() if value else ""
 
 
-def _field_map(extracted_fields: list[ExtractedFieldRead]) -> dict[str, ExtractedFieldRead]:
+def _field_map(extracted_fields: list[ExtractedFieldRead]) -> dict[str, ExtractedFieldRead | None]:
     return {field.field_name: field for field in extracted_fields}
 
 
@@ -28,22 +29,25 @@ def _has_truthy_indicator(value: str | None) -> bool:
     return _normalize(value) in {"yes", "true", "required", "y", "1", "present"}
 
 
-def _is_buyer_purchase_with_mortgage(fields: dict[str, ExtractedFieldRead]) -> bool:
+def _is_buyer_purchase_with_mortgage(fields: dict[str, ExtractedFieldRead | None]) -> bool:
+    party_role = fields.get("party_role")
+    transaction_type = fields.get("transaction_type")
+    finance_type = fields.get("finance_type")
     return (
-        _normalize(fields.get("party_role").value if fields.get("party_role") else None) == "buyer"
-        and _normalize(fields.get("transaction_type").value if fields.get("transaction_type") else None)
+        _normalize(party_role.value if party_role is not None else None) == "buyer"
+        and _normalize(transaction_type.value if transaction_type is not None else None)
         == "purchase"
-        and _normalize(fields.get("finance_type").value if fields.get("finance_type") else None)
-        == "mortgage"
+        and _normalize(finance_type.value if finance_type is not None else None) == "mortgage"
     )
 
 
-def _is_vendor_matter_with_discharge(fields: dict[str, ExtractedFieldRead]) -> bool:
-    return (
-        _normalize(fields.get("party_role").value if fields.get("party_role") else None) == "vendor"
-        and _has_truthy_indicator(
-            fields.get("discharge_required").value if fields.get("discharge_required") else None
-        )
+def _is_vendor_matter_with_discharge(fields: dict[str, ExtractedFieldRead | None]) -> bool:
+    party_role = fields.get("party_role")
+    discharge_required = fields.get("discharge_required")
+    return _normalize(
+        party_role.value if party_role is not None else None
+    ) == "vendor" and _has_truthy_indicator(
+        discharge_required.value if discharge_required is not None else None
     )
 
 
@@ -65,9 +69,11 @@ RULES: tuple[ChecklistRule, ...] = (
 )
 
 
-def _finding_from_rule(rule: ChecklistRule, fields: dict[str, ExtractedFieldRead]) -> ChecklistFindingRead:
+def _finding_from_rule(
+    rule: ChecklistRule, fields: dict[str, ExtractedFieldRead | None]
+) -> ChecklistFindingRead:
     evidence = fields.get(rule.evidence_field)
-    if evidence and evidence.value and evidence.value.strip():
+    if evidence is not None and evidence.value and evidence.value.strip():
         return ChecklistFindingRead(
             item_name=rule.item_name,
             status="pass",
@@ -75,8 +81,10 @@ def _finding_from_rule(rule: ChecklistRule, fields: dict[str, ExtractedFieldRead
             reason=rule.reason_present,
         )
 
-    cited_field = fields.get("finance_type") or fields.get("discharge_required") or fields.get("party_role")
-    citation = cited_field.citation if cited_field else rule.fallback_citation
+    cited_field = (
+        fields.get("finance_type") or fields.get("discharge_required") or fields.get("party_role")
+    )
+    citation = cited_field.citation if cited_field is not None else rule.fallback_citation
     return ChecklistFindingRead(
         item_name=rule.item_name,
         status="unclear",
@@ -85,7 +93,9 @@ def _finding_from_rule(rule: ChecklistRule, fields: dict[str, ExtractedFieldRead
     )
 
 
-def evaluate_checklist(*, matter_id: UUID, extracted_fields: list[ExtractedFieldRead]) -> ChecklistResponse:
+def evaluate_checklist(
+    *, matter_id: UUID, extracted_fields: list[ExtractedFieldRead]
+) -> ChecklistResponse:
     fields = _field_map(extracted_fields)
     findings: list[ChecklistFindingRead] = []
 

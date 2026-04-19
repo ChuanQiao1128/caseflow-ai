@@ -47,10 +47,7 @@ def test_source_text_files_contain_disclaimer(case_id: str) -> None:
 
 def test_chunk_parser_extracts_page_numbers_and_content() -> None:
     source_text_file = (
-        DATA_ROOT
-        / "case-001-individual-buyer-mortgage"
-        / "source_text"
-        / "doc-001.md"
+        DATA_ROOT / "case-001-individual-buyer-mortgage" / "source_text" / "doc-001.md"
     )
 
     chunks = parse_source_text_file(source_text_file)

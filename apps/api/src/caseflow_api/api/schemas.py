@@ -121,7 +121,7 @@ class ChecklistFindingRead(BaseModel):
     reason: str | None = None
 
     @model_validator(mode="after")
-    def validate_unclear_reason_and_citation(self) -> "ChecklistFindingRead":
+    def validate_unclear_reason_and_citation(self) -> ChecklistFindingRead:
         if self.status == "unclear" and not self.reason:
             raise ValueError("unclear findings require a reason")
         if self.status == "unclear" and not self.citation:
@@ -134,3 +134,28 @@ class ChecklistResponse(BaseModel):
 
     matter_id: UUID
     findings: list[ChecklistFindingRead] = Field(default_factory=list)
+
+
+class ReviewBoundednessRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    is_bounded: bool = True
+    is_legal_advice: bool = False
+    disclaimer: str = (
+        "This review is a bounded human review aid, not legal advice or a legal approval. "
+        "It highlights extracted evidence and checklist findings for manual review."
+    )
+
+
+class ReviewDecisionRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    review_summary: str
+    overall_status: Literal[
+        "needs_human_review",
+        "ready_for_review",
+        "insufficient_evidence",
+    ]
+    extracted_fields: list[ExtractedFieldRead] = Field(default_factory=list)
+    checklist_findings: list[ChecklistFindingRead] = Field(default_factory=list)
+    boundedness: ReviewBoundednessRead = Field(default_factory=ReviewBoundednessRead)

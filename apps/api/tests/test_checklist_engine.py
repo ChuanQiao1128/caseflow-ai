@@ -5,7 +5,6 @@ from uuid import UUID
 from caseflow_api.api.schemas import ExtractedFieldRead
 from caseflow_api.checklists.engine import evaluate_checklist
 
-
 MATT = UUID("11111111-1111-1111-1111-111111111111")
 
 
@@ -40,7 +39,11 @@ def test_buyer_purchase_with_mortgage_requires_lender_evidence_passes_when_prese
         ],
     )
 
-    finding = next(item for item in response.findings if item.item_name == "buyer_purchase_with_mortgage_requires_lender_evidence")
+    finding = next(
+        item
+        for item in response.findings
+        if item.item_name == "buyer_purchase_with_mortgage_requires_lender_evidence"
+    )
     assert finding.status == "pass"
     assert finding.reason == "Lender evidence is present"
     assert finding.citation == "Page 8"
@@ -71,7 +74,11 @@ def test_buyer_purchase_with_mortgage_requires_lender_evidence_is_unclear_when_m
         ],
     )
 
-    finding = next(item for item in response.findings if item.item_name == "buyer_purchase_with_mortgage_requires_lender_evidence")
+    finding = next(
+        item
+        for item in response.findings
+        if item.item_name == "buyer_purchase_with_mortgage_requires_lender_evidence"
+    )
     assert finding.status == "unclear"
     assert finding.reason == "Mortgage is indicated, but lender evidence was not found"
     assert finding.citation == "Page 2"
@@ -102,7 +109,11 @@ def test_vendor_matter_with_discharge_requires_discharge_evidence() -> None:
         ],
     )
 
-    finding = next(item for item in response.findings if item.item_name == "vendor_matter_with_discharge_requires_discharge_evidence")
+    finding = next(
+        item
+        for item in response.findings
+        if item.item_name == "vendor_matter_with_discharge_requires_discharge_evidence"
+    )
     assert finding.status == "pass"
     assert finding.reason == "Discharge evidence is present"
     assert finding.citation == "Page 9"

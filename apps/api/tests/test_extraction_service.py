@@ -10,7 +10,9 @@ from caseflow_api.retrieval.service import MatterRetrievalResult
 def test_extract_matter_fields_uses_retrieval_and_returns_citations(monkeypatch) -> None:
     calls: list[tuple[str, UUID, UUID, str]] = []
 
-    def fake_search_matter_evidence(*, db, organisation_id, matter_id, query, limit=5, max_distance=0.95):
+    def fake_search_matter_evidence(
+        *, db, organisation_id, matter_id, query, limit=5, max_distance=0.95
+    ):
         calls.append((db, organisation_id, matter_id, query))
         return MatterRetrievalResult(
             organisation_id=organisation_id,
@@ -31,7 +33,9 @@ def test_extract_matter_fields_uses_retrieval_and_returns_citations(monkeypatch)
             ],
         )
 
-    monkeypatch.setattr("caseflow_api.extraction.service.search_matter_evidence", fake_search_matter_evidence)
+    monkeypatch.setattr(
+        "caseflow_api.extraction.service.search_matter_evidence", fake_search_matter_evidence
+    )
 
     from caseflow_api.extraction.service import ExtractionFieldSpec, extract_matter_fields
 
@@ -49,11 +53,16 @@ def test_extract_matter_fields_uses_retrieval_and_returns_citations(monkeypatch)
     assert response.extracted_fields[0].field_name == "settlement_date"
     assert response.extracted_fields[0].value == "30 April 2026"
     assert response.extracted_fields[0].confidence == 0.9
-    assert response.extracted_fields[0].citation == "document 22222222-2222-2222-2222-222222222222 (page 3, chunk 1)"
+    assert (
+        response.extracted_fields[0].citation
+        == "document 22222222-2222-2222-2222-222222222222 (page 3, chunk 1)"
+    )
 
 
 def test_extract_matter_fields_returns_unclear_when_evidence_is_missing(monkeypatch) -> None:
-    def fake_search_matter_evidence(*, db, organisation_id, matter_id, query, limit=5, max_distance=0.95):
+    def fake_search_matter_evidence(
+        *, db, organisation_id, matter_id, query, limit=5, max_distance=0.95
+    ):
         return MatterRetrievalResult(
             organisation_id=organisation_id,
             matter_id=matter_id,
@@ -64,7 +73,9 @@ def test_extract_matter_fields_returns_unclear_when_evidence_is_missing(monkeypa
             message="No relevant evidence found",
         )
 
-    monkeypatch.setattr("caseflow_api.extraction.service.search_matter_evidence", fake_search_matter_evidence)
+    monkeypatch.setattr(
+        "caseflow_api.extraction.service.search_matter_evidence", fake_search_matter_evidence
+    )
 
     from caseflow_api.extraction.service import ExtractionFieldSpec, extract_matter_fields
 

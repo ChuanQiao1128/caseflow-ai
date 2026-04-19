@@ -21,7 +21,9 @@ def _create_org_matter(client: TestClient, name: str, title: str) -> tuple[dict,
     return org, matter
 
 
-def test_extract_matter_fields_endpoint_returns_structured_payload(client: TestClient, monkeypatch) -> None:
+def test_extract_matter_fields_endpoint_returns_structured_payload(
+    client: TestClient, monkeypatch
+) -> None:
     org, matter = _create_org_matter(client, "Acme Law", "Matter A")
     captured: dict[str, object] = {}
 
@@ -41,7 +43,9 @@ def test_extract_matter_fields_endpoint_returns_structured_payload(client: TestC
             ],
         )
 
-    monkeypatch.setattr("caseflow_api.api.routers.extraction.extract_matter_fields", fake_extract_matter_fields)
+    monkeypatch.setattr(
+        "caseflow_api.api.routers.extraction.extract_matter_fields", fake_extract_matter_fields
+    )
 
     response = client.post(f"/organisations/{org['id']}/matters/{matter['id']}/extract")
 
@@ -57,7 +61,9 @@ def test_extract_matter_fields_endpoint_returns_structured_payload(client: TestC
     assert payload["extracted_fields"][0]["citation"] == "document 1 (page 3, chunk 1)"
 
 
-def test_extract_matter_fields_endpoint_returns_unclear_when_evidence_missing(client: TestClient, monkeypatch) -> None:
+def test_extract_matter_fields_endpoint_returns_unclear_when_evidence_missing(
+    client: TestClient, monkeypatch
+) -> None:
     org, matter = _create_org_matter(client, "Beta Law", "Matter B")
 
     def fake_extract_matter_fields(*, db, organisation_id, matter_id, field_specs):
@@ -73,7 +79,9 @@ def test_extract_matter_fields_endpoint_returns_unclear_when_evidence_missing(cl
             ],
         )
 
-    monkeypatch.setattr("caseflow_api.api.routers.extraction.extract_matter_fields", fake_extract_matter_fields)
+    monkeypatch.setattr(
+        "caseflow_api.api.routers.extraction.extract_matter_fields", fake_extract_matter_fields
+    )
 
     response = client.post(f"/organisations/{org['id']}/matters/{matter['id']}/extract")
 

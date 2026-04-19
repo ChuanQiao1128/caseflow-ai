@@ -6,6 +6,7 @@ from caseflow_api.api.routers import (
     health_router,
     organisations_router,
     retrieval_router,
+    review_router,
 )
 from caseflow_api.settings import get_settings
 
@@ -18,6 +19,7 @@ def create_app() -> FastAPI:
     app.include_router(retrieval_router)
     app.include_router(extraction_router)
     app.include_router(checklists_router)
+    app.include_router(review_router)
     return app
 
 

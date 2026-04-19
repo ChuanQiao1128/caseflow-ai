@@ -82,7 +82,9 @@ def load_synthetic_case_documents(
 
     documents = list(
         db.scalars(
-            select(Document).join(Matter).where(
+            select(Document)
+            .join(Matter)
+            .where(
                 Matter.id == matter_id,
                 Matter.organisation_id == organisation_id,
             )
@@ -122,8 +124,7 @@ def load_synthetic_case_documents(
         if matched_document is None:
             identifier = document_id or filename or storage_key
             raise ValueError(
-                f"Could not match synthetic document {identifier!r} "
-                "to matter documents"
+                f"Could not match synthetic document {identifier!r} to matter documents"
             )
         matches.append(
             SyntheticDocumentMatch(
@@ -152,8 +153,7 @@ def prepare_synthetic_chunk_records(
         document_id = document_lookup.get(document_key)
         if document_id is None:
             raise ValueError(
-                "No document mapping found for source text file "
-                f"{source_text_file.name}"
+                f"No document mapping found for source text file {source_text_file.name}"
             )
 
         for chunk in parse_source_text_file(source_text_file):
