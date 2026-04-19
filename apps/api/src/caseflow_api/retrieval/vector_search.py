@@ -14,6 +14,7 @@ class VectorSearchResult:
     chunk_id: UUID
     document_id: UUID
     page_number: int | None
+    chunk_index: int
     content: str
     score: float
 
@@ -41,6 +42,7 @@ def search_document_chunks(
             DocumentChunk.id,
             DocumentChunk.document_id,
             DocumentChunk.page_number,
+            DocumentChunk.chunk_index,
             DocumentChunk.content,
             distance_expr.label("score"),
         )
@@ -61,6 +63,7 @@ def search_document_chunks(
             chunk_id=row.id,
             document_id=row.document_id,
             page_number=row.page_number,
+            chunk_index=row.chunk_index,
             content=row.content,
             score=float(row.score),
         )

@@ -14,7 +14,12 @@ from caseflow_api.database import Base
 from caseflow_api.ingestion.chunking import parse_source_text_file
 from caseflow_api.ingestion.synthetic_ingestion import prepare_synthetic_chunk_records
 from caseflow_api.models import Document, DocumentChunk, Matter, Organisation
-from caseflow_api.retrieval.vector_search import search_document_chunks
+from caseflow_api.retrieval import (
+    build_citation,
+    format_evidence_chunks,
+    search_document_chunks,
+)
+from caseflow_api.retrieval.service import search_matter_evidence
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 CASE_DIR = (
@@ -23,6 +28,7 @@ CASE_DIR = (
     / "property-settlement"
     / "case-001-individual-buyer-mortgage"
 )
+CASEFLOW_TEST_DATABASE_URL = os.getenv("CASEFLOW_TEST_DATABASE_URL")
 
 
 def test_embed_text_is_deterministic() -> None:
@@ -148,7 +154,73 @@ def test_vector_search_stays_within_matter_scope() -> None:
         assert all(result.document_id == doc_a.id for result in results)
         assert all(result.chunk_id == chunk_a.id for result in results)
         assert all(result.page_number == 1 for result in results)
+        assert all(result.chunk_index == 0 for result in results)
     finally:
         session.close()
         with engine.begin() as connection:
             Base.metadata.drop_all(bind=connection)
+
+
+def test_evidence_formatting_includes_citation_fields() -> None:
+    result = type(
+        "Result",
+        (),
+        {
+            "chunk_id": uuid4(),
+            "document_id": uuid4(),
+            "page_number": 2,
+            "chunk_index": 3,
+            "content": "Sample evidence",
+            "score": 0.123,
+        },
+    )()
+    formatted = format_evidence_chunks([result])
+
+    assert formatted[0].chunk_id == result.chunk_id
+    assert formatted[0].document_id == result.document_id
+    assert formatted[0].page_number == 2
+    assert formatted[0].chunk_index == 3
+    assert formatted[0].citation == build_citation(
+        document_id=result.document_id,
+        page_number=2,
+        chunk_index=3,
+    )
+
+
+def test_search_service_returns_low_confidence_when_no_relevant_evidence(
+    db_session,
+) -> None:
+    organisation = Organisation(name="Org")
+    matter = Matter(title="Matter", organisation=organisation)
+    document = Document(
+        matter=matter,
+        filename="doc.pdf",
+        mime_type="application/pdf",
+        storage_key="storage/doc.pdf",
+    )
+    db_session.add_all([organisation, matter, document])
+    db_session.flush()
+    db_session.add(
+        DocumentChunk(
+            document_id=document.id,
+            chunk_index=0,
+            page_number=1,
+            content="Completely unrelated text.",
+            embedding=embed_text("Completely unrelated text."),
+        )
+    )
+    db_session.commit()
+
+    retrieval = search_matter_evidence(
+        db=db_session,
+        organisation_id=organisation.id,
+        matter_id=matter.id,
+        query="qwerty zxcvbnm unrelated nonsense",
+        limit=5,
+        max_distance=0.0,
+    )
+
+    assert retrieval.has_evidence is False
+    assert retrieval.confidence == "low"
+    assert retrieval.results == []
+    assert retrieval.message == "No relevant evidence found"

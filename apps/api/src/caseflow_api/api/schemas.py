@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class OrganisationCreate(BaseModel):
@@ -66,3 +66,30 @@ class AuditLogRead(BaseModel):
     details: dict[str, object]
     created_at: datetime
     updated_at: datetime | None = None
+
+
+class EvidenceChunkRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    chunk_id: UUID
+    document_id: UUID
+    page_number: int | None = None
+    chunk_index: int
+    content: str
+    score: float
+    citation: str
+
+
+class MatterSearchRequest(BaseModel):
+    query: str = Field(min_length=1)
+    limit: int = Field(default=5, ge=1, le=20)
+
+
+class MatterSearchResponse(BaseModel):
+    organisation_id: UUID
+    matter_id: UUID
+    query: str
+    results: list[EvidenceChunkRead]
+    confidence: str
+    has_evidence: bool
+    message: str | None = None
