@@ -1,0 +1,16 @@
+{
+  "disclaimer": "SYNTHETIC DEMO DATA — NOT REAL CLIENT DATA",
+  "case_id": "case-003-trust-buyer-mortgage-cdd",
+  "matter_title": "Albany Trust Purchase with CDD Review",
+  "matter_type": "trust_buyer_mortgage_cdd",
+  "expected_missing_items": [
+    "Trust deed and deed of variation are inconsistent about signing trustees",
+    "Proof of address is missing for one trustee",
+    "Trustee signature is missing for the trustee removed by the deed variation"
+  ],
+  "expected_flags": [
+    "trust_deed_variation_inconsistency",
+    "trustee_proof_of_address_missing",
+    "trustee_signature_missing"
+  ]
+}

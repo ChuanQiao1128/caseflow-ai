@@ -1,0 +1,16 @@
+{
+  "disclaimer": "SYNTHETIC DEMO DATA — NOT REAL CLIENT DATA",
+  "case_id": "case-001-individual-buyer-mortgage",
+  "matter_title": "Pukekohe Purchase for the Ngata Family",
+  "matter_type": "individual_buyer_mortgage",
+  "expected_missing_items": [
+    "Proof of address for at least one buyer is missing",
+    "Insurance policy starts after the settlement date",
+    "Gifted funds donor identification is missing from the source of funds pack"
+  ],
+  "expected_flags": [
+    "proof_of_address_missing",
+    "insurance_start_date_after_settlement",
+    "gifted_funds_id_missing"
+  ]
+}

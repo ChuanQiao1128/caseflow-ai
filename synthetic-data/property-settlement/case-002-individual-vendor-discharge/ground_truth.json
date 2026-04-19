@@ -1,0 +1,12 @@
+{
+  "disclaimer": "SYNTHETIC DEMO DATA — NOT REAL CLIENT DATA",
+  "case_id": "case-002-individual-vendor-discharge",
+  "matter_title": "Papakura Vendor Sale and Mortgage Discharge",
+  "matter_type": "individual_vendor_discharge",
+  "expected_missing_items": [
+    "Mortgage discharge authority is unclear from the instructions email"
+  ],
+  "expected_flags": [
+    "discharge_authority_unclear"
+  ]
+}

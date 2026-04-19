@@ -1,0 +1,40 @@
+{
+  "disclaimer": "SYNTHETIC DEMO DATA — NOT REAL CLIENT DATA",
+  "documents": [
+    {
+      "document_id": "doc-001",
+      "filename": "agreement-of-sale-and-purchase.pdf",
+      "document_type": "sale_and_purchase_agreement",
+      "pages": 12,
+      "notes": "Signed agreement; finance condition due 2026-04-30."
+    },
+    {
+      "document_id": "doc-002",
+      "filename": "title-search.pdf",
+      "document_type": "record_of_title",
+      "pages": 4,
+      "notes": "CT shows freehold title and mortgage to Harbour Bank."
+    },
+    {
+      "document_id": "doc-003",
+      "filename": "buyer-id-pack.pdf",
+      "document_type": "passport",
+      "pages": 6,
+      "notes": "Passport and driver licence for both buyers; no current proof of address included."
+    },
+    {
+      "document_id": "doc-004",
+      "filename": "loan-pack.pdf",
+      "document_type": "bank_loan_pack",
+      "pages": 18,
+      "notes": "Loan approval and conditions; insurance evidence requested."
+    },
+    {
+      "document_id": "doc-005",
+      "filename": "insurance-certificate.pdf",
+      "document_type": "insurance_certificate",
+      "pages": 2,
+      "notes": "Policy start date is 2026-05-16, two days after settlement."
+    }
+  ]
+}

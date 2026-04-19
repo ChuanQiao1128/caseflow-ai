@@ -1,0 +1,10 @@
+{
+  "disclaimer": "SYNTHETIC DEMO DATA — NOT REAL CLIENT DATA",
+  "case_id": "case-004-trust-vendor-deed-variation",
+  "questions": [
+    "Does the deed variation override the trust deed for signing authority?",
+    "Are all required trustee signatures present on the discharge authority?",
+    "Is there any unresolved mismatch between the trust deed and variation?",
+    "Can the lender discharge proceed once the missing signatures are obtained?"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "disclaimer": "SYNTHETIC DEMO DATA — NOT REAL CLIENT DATA",
+  "case_id": "case-004-trust-vendor-deed-variation",
+  "matter_title": "Remuera Trust Sale with Deed Variation Review",
+  "matter_type": "trust_vendor_deed_variation",
+  "organisation_name": "Seacliff Legal",
+  "client": {
+    "trust_name": "Ellwood Family Trust",
+    "trustees": [
+      "Hine Ellwood",
+      "Mark Ellwood"
+    ],
+    "property_address": "11 Pohutukawa Lane, Remuera 1050",
+    "sale_price_nzd": 2360000,
+    "settlement_date": "2026-08-21",
+    "lender_name": "Cobalt Lending"
+  }
+}

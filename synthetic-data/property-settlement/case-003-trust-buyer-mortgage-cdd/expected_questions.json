@@ -1,0 +1,10 @@
+{
+  "disclaimer": "SYNTHETIC DEMO DATA — NOT REAL CLIENT DATA",
+  "case_id": "case-003-trust-buyer-mortgage-cdd",
+  "questions": [
+    "Which trustees are authorised to sign under the latest deed variation?",
+    "Is proof of address available for every trustee?",
+    "Does the trustee resolution match the deed variation and signing authority?",
+    "Are there any CDD items still outstanding for the trust?"
+  ]
+}
