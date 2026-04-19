@@ -53,6 +53,20 @@ def test_every_synthetic_file_contains_disclaimer(case_id: str) -> None:
 
 
 @pytest.mark.parametrize("case_id", CASE_IDS)
+def test_source_text_directory_exists_for_each_case(case_id: str) -> None:
+    case_dir = DATA_ROOT / case_id
+    assert (case_dir / "source_text").is_dir()
+
+
+@pytest.mark.parametrize("case_id", CASE_IDS)
+def test_each_source_text_file_contains_disclaimer(case_id: str) -> None:
+    case_dir = DATA_ROOT / case_id
+    for source_text_file in (case_dir / "source_text").glob("*.md"):
+        content = source_text_file.read_text(encoding="utf-8")
+        assert SYNTHETIC_DISCLAIMER in content
+
+
+@pytest.mark.parametrize("case_id", CASE_IDS)
 def test_ground_truth_contains_expected_missing_items(case_id: str) -> None:
     case_dir = DATA_ROOT / case_id
     ground_truth = json.loads((case_dir / "ground_truth.json").read_text(encoding="utf-8"))
