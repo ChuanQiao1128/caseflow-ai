@@ -1,14 +1,20 @@
 import type { ApprovalQueueItemDemo } from '../data/demo-data';
 
+function statusLabel(status: ApprovalQueueItemDemo['status']) {
+  if (status === 'pending') return '待审批';
+  if (status === 'needs_changes') return '需修改';
+  return '已批准';
+}
+
 export function ApprovalQueueCard({ items, compact = false }: { items: ApprovalQueueItemDemo[]; compact?: boolean }) {
   return (
     <section className="panel">
       <div className="panel-header">
         <div>
-          <p className="eyebrow">Approval queue</p>
-          <h2>Human review items</h2>
+          <p className="eyebrow">人工审批队列</p>
+          <h2>待人工确认事项</h2>
         </div>
-        <span className="pill">{items.length} items</span>
+        <span className="pill">{items.length} 项</span>
       </div>
 
       <div className={`queue ${compact ? 'queue-compact' : ''}`}>
@@ -19,14 +25,14 @@ export function ApprovalQueueCard({ items, compact = false }: { items: ApprovalQ
                 <strong>{item.subject}</strong>
                 <p>{item.context}</p>
               </div>
-              <span className={`status status-${item.status}`}>{item.status.replace('_', ' ')}</span>
+              <span className={`status status-${item.status}`}>{statusLabel(item.status)}</span>
             </div>
             <div className="queue-item-body">
-              <span className="label">Reason</span>
+              <span className="label">进入队列原因</span>
               <p>{item.reason}</p>
               {item.reviewerNotes ? (
                 <p className="queue-note">
-                  <span className="label">Reviewer note</span>
+                  <span className="label">审阅备注</span>
                   {item.reviewerNotes}
                 </p>
               ) : null}

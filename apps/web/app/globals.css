@@ -72,6 +72,12 @@ p {
   gap: 14px;
 }
 
+.site-subtitle {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
 .brand-mark {
   width: 42px;
   height: 42px;
@@ -479,6 +485,31 @@ h2 {
   margin-top: 8px;
 }
 
+.journey-item {
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(131, 148, 173, 0.2);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.journey-item strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.principles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.principle-card {
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(251, 253, 255, 0.96);
+}
+
 .citation-chip {
   background: rgba(51, 92, 255, 0.08);
   color: var(--accent-strong);
@@ -516,7 +547,8 @@ h2 {
 
 @media (max-width: 1080px) {
   .metrics-grid,
-  .doc-grid {
+  .doc-grid,
+  .principles-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -556,7 +588,8 @@ h2 {
 
   .metrics-grid,
   .matter-meta,
-  .doc-grid {
+  .doc-grid,
+  .principles-grid {
     grid-template-columns: 1fr;
   }
 

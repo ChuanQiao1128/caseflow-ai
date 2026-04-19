@@ -13,27 +13,27 @@ export function MatterWorkflowCard({ matter, steps }: { matter: MatterCardData; 
     <section className="panel">
       <div className="panel-header">
         <div>
-          <p className="eyebrow">Workflow</p>
-          <h2>Matter overview</h2>
+          <p className="eyebrow">案件流程</p>
+          <h2>当前进度总览</h2>
         </div>
         <span className="pill">{matter.status}</span>
       </div>
 
       <div className="matter-meta">
         <div>
-          <span className="label">Matter</span>
+          <span className="label">案件名称</span>
           <strong>{matter.title}</strong>
         </div>
         <div>
-          <span className="label">Organisation</span>
+          <span className="label">机构</span>
           <strong>{matter.organisation}</strong>
         </div>
         <div>
-          <span className="label">Type</span>
+          <span className="label">案件类型</span>
           <strong>{matter.type}</strong>
         </div>
         <div>
-          <span className="label">Settlement</span>
+          <span className="label">交割日期</span>
           <strong>{matter.settlementDate}</strong>
         </div>
       </div>

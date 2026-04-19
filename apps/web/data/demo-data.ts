@@ -83,23 +83,23 @@ export const demoMatter: MatterDemo = {
 
 export const demoWorkflowSteps: WorkflowStep[] = [
   {
-    name: 'Ingest documents',
-    summary: 'Synthetic settlement pack loaded and classified.',
+    name: '接收并分类文件',
+    summary: '已导入合成交割材料并完成基础分类。',
     state: 'done'
   },
   {
-    name: 'Extract key facts',
-    summary: 'Purchase price, lender, and settlement date captured.',
+    name: '抽取关键字段',
+    summary: '已抽取贷款方、交割日、交易主体等信息。',
     state: 'done'
   },
   {
-    name: 'Run checklist review',
-    summary: 'Proof of address and insurance timing need review.',
+    name: '执行规则审查',
+    summary: '地址证明与保险起保时间存在待核对项。',
     state: 'active'
   },
   {
-    name: 'Queue for approval',
-    summary: 'Draft follow-up email is waiting for a human decision.',
+    name: '进入人工审批',
+    summary: '外联邮件草稿已进入待审批队列。',
     state: 'blocked'
   }
 ];
@@ -238,8 +238,8 @@ export const demoAuditLogs: AuditLogDemo[] = [
 ];
 
 export const demoMetrics = [
-  { label: 'Documents', value: '3', hint: 'Synthetic pack registered for this matter' },
-  { label: 'Extracted facts', value: '3', hint: 'Cited fields ready for review' },
-  { label: 'Open queue items', value: '2', hint: 'Waiting for human approval' },
-  { label: 'Evidence confidence', value: 'High', hint: 'Bounded workflow, no final legal advice' }
+  { label: '文件总数', value: '3', hint: '该案件已登记的合成材料' },
+  { label: '已抽取字段', value: '3', hint: '均附带来源页码可回溯' },
+  { label: '队列待办', value: '2', hint: '等待人工审批的可执行动作' },
+  { label: '证据可信度', value: '高', hint: '证据不足时会明确标记待核对' }
 ];
