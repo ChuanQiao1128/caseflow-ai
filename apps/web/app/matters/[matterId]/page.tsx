@@ -1,6 +1,5 @@
 import Link from 'next/link';
-import { demoMatter } from '../../../data/demo-data';
-import { loadMatterWorkspace } from '../../../lib/backend';
+import { loadMatterWorkspace, type WorkspaceDocument } from '../../../lib/backend';
 
 function statusLabel(value: string) {
   const normalized = value.toLowerCase();
@@ -11,6 +10,35 @@ function statusLabel(value: string) {
   if (normalized.includes('pass')) return '通过';
   if (normalized.includes('unclear')) return '待核对';
   return value;
+}
+
+function normalize(value: string) {
+  return value.toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+function resolveCitationLink(citation: string, documents: WorkspaceDocument[]) {
+  const [rawDoc, rawPage] = citation.split('·').map((item) => item.trim());
+  const docPart = normalize(rawDoc ?? citation);
+
+  const matched =
+    documents.find((doc) => docPart.includes(normalize(doc.name))) ??
+    documents.find((doc) => normalize(doc.name).includes(docPart));
+
+  if (!matched) {
+    return null;
+  }
+
+  return {
+    href: `#source-${matched.id}`,
+    label: rawPage ? `${matched.name} / ${rawPage}` : matched.name
+  };
+}
+
+function riskLabel(value?: 'high' | 'medium' | 'low') {
+  if (value === 'high') return '高风险';
+  if (value === 'medium') return '中风险';
+  if (value === 'low') return '低风险';
+  return '风险未知';
 }
 
 export default async function MatterDetailPage({ params }: { params: { matterId: string } }) {
@@ -35,6 +63,25 @@ export default async function MatterDetailPage({ params }: { params: { matterId:
 
   const { backend, matter, documents, queueItems, auditLogs, analysis, mode } = workspace;
   const isLive = mode === 'live';
+
+  const checklistPassCount = analysis.checklist.filter((item) => item.status === 'pass').length;
+  const checklistPassRate = analysis.checklist.length === 0 ? 0 : checklistPassCount / analysis.checklist.length;
+
+  const confidenceScores = analysis.fields
+    .map((item) => Number.parseFloat(item.confidence))
+    .filter((item) => Number.isFinite(item));
+  const averageConfidence =
+    confidenceScores.length === 0 ? 0 : confidenceScores.reduce((sum, score) => sum + score, 0) / confidenceScores.length;
+
+  const citations = [
+    ...analysis.fields.map((item) => item.citation),
+    ...analysis.checklist.map((item) => item.citation),
+    ...analysis.evidence.map((item) => item.citation)
+  ];
+  const linkedCitationCount = citations.filter((item) => resolveCitationLink(item, documents)).length;
+  const citationCoverage = citations.length === 0 ? 0 : linkedCitationCount / citations.length;
+
+  const evidenceCompleteness = Math.round((checklistPassRate * 0.4 + averageConfidence * 0.4 + citationCoverage * 0.2) * 100);
 
   return (
     <main className="shell shell-detail">
@@ -68,6 +115,14 @@ export default async function MatterDetailPage({ params }: { params: { matterId:
               <span className="label">最近更新</span>
               <strong>{matter.lastUpdated}</strong>
             </div>
+            <div>
+              <span className="label">风险等级</span>
+              <strong>{riskLabel(matter.riskLevel)}</strong>
+            </div>
+            <div>
+              <span className="label">待办数量</span>
+              <strong>{String(matter.openQueueItems ?? queueItems.length)}</strong>
+            </div>
           </div>
         </aside>
       </header>
@@ -95,6 +150,29 @@ export default async function MatterDetailPage({ params }: { params: { matterId:
         </article>
       </section>
 
+      <section className="panel">
+        <div className="panel-header">
+          <div>
+            <p className="eyebrow">证据完整度</p>
+            <h2>当前案件证据健康度：{evidenceCompleteness}%</h2>
+          </div>
+          <span className="pill">可追溯率 {Math.round(citationCoverage * 100)}%</span>
+        </div>
+        <div className="evidence-progress-track" role="progressbar" aria-valuenow={evidenceCompleteness} aria-valuemin={0} aria-valuemax={100}>
+          <div className="evidence-progress-fill" style={{ width: `${evidenceCompleteness}%` }} />
+        </div>
+        <div className="principles-grid">
+          <article className="principle-card">
+            <span className="label">Checklist 通过率</span>
+            <strong>{Math.round(checklistPassRate * 100)}%</strong>
+          </article>
+          <article className="principle-card">
+            <span className="label">字段平均置信度</span>
+            <strong>{Math.round(averageConfidence * 100)}%</strong>
+          </article>
+        </div>
+      </section>
+
       <section className="detail-grid">
         <div className="panel">
           <div className="panel-header">
@@ -109,7 +187,7 @@ export default async function MatterDetailPage({ params }: { params: { matterId:
           </p>
           <div className="doc-grid">
             {documents.map((doc) => (
-              <article key={doc.id} className="doc-card">
+              <article key={doc.id} id={`source-${doc.id}`} className="doc-card">
                 <span className="pill pill-soft">{doc.tag}</span>
                 <strong>{doc.name}</strong>
                 <p>{doc.pages}</p>
@@ -127,29 +205,47 @@ export default async function MatterDetailPage({ params }: { params: { matterId:
             <span className="pill">证据留痕</span>
           </div>
           <div className="list-stack">
-            {analysis.fields.map((field) => (
-              <div key={field.name} className="info-row">
-                <div>
-                  <span className="label">{field.name}</span>
-                  <strong>{field.value}</strong>
-                  <p>置信度 {field.confidence}</p>
+            {analysis.fields.map((field) => {
+              const link = resolveCitationLink(field.citation, documents);
+              return (
+                <div key={field.name} className="info-row">
+                  <div>
+                    <span className="label">{field.name}</span>
+                    <strong>{field.value}</strong>
+                    <p>置信度 {field.confidence}</p>
+                  </div>
+                  {link ? (
+                    <a className="citation-chip citation-link" href={link.href}>
+                      {link.label}
+                    </a>
+                  ) : (
+                    <span className="citation-chip">{field.citation}</span>
+                  )}
                 </div>
-                <span className="citation-chip">{field.citation}</span>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <div className="divider" />
           <div className="list-stack">
-            {analysis.checklist.map((item) => (
-              <div key={item.name} className="info-row info-row-tight">
-                <div>
-                  <span className="label">{item.name}</span>
-                  <strong>{statusLabel(item.status)}</strong>
-                  <p>{item.reason}</p>
+            {analysis.checklist.map((item) => {
+              const link = resolveCitationLink(item.citation, documents);
+              return (
+                <div key={item.name} className="info-row info-row-tight">
+                  <div>
+                    <span className="label">{item.name}</span>
+                    <strong>{statusLabel(item.status)}</strong>
+                    <p>{item.reason}</p>
+                  </div>
+                  {link ? (
+                    <a className="citation-chip citation-link" href={link.href}>
+                      {link.label}
+                    </a>
+                  ) : (
+                    <span className="citation-chip">{item.citation}</span>
+                  )}
                 </div>
-                <span className="citation-chip">{item.citation}</span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -164,15 +260,24 @@ export default async function MatterDetailPage({ params }: { params: { matterId:
             <span className="pill">仅作审查辅助</span>
           </div>
           <div className="evidence-list">
-            {analysis.evidence.map((item) => (
-              <article key={item.label} className="evidence-item">
-                <div>
-                  <strong>{item.label}</strong>
-                  <p>{item.note}</p>
-                </div>
-                <span className="citation-chip">{item.citation}</span>
-              </article>
-            ))}
+            {analysis.evidence.map((item) => {
+              const link = resolveCitationLink(item.citation, documents);
+              return (
+                <article key={item.label} className="evidence-item">
+                  <div>
+                    <strong>{item.label}</strong>
+                    <p>{item.note}</p>
+                  </div>
+                  {link ? (
+                    <a className="citation-chip citation-link" href={link.href}>
+                      {link.label}
+                    </a>
+                  ) : (
+                    <span className="citation-chip">{item.citation}</span>
+                  )}
+                </article>
+              );
+            })}
           </div>
           <div className="divider" />
           <div className="list-stack">

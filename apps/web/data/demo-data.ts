@@ -8,6 +8,8 @@ export type MatterDemo = {
   client: string;
   lastUpdated: string;
   reference: string | null;
+  riskLevel?: 'high' | 'medium' | 'low';
+  openQueueItems?: number;
 };
 
 export type WorkflowStep = {
@@ -75,11 +77,56 @@ export const demoMatter: MatterDemo = {
   organisation: 'Kauri Coast Legal',
   type: 'Individual buyer + mortgage',
   status: 'Needs human review',
-  settlementDate: '14 May 2026',
+  settlementDate: '2026-05-14',
   client: 'Ngata Family',
   lastUpdated: 'Updated 8 minutes ago',
-  reference: 'DEMO-001'
+  reference: 'DEMO-001',
+  riskLevel: 'high',
+  openQueueItems: 2
 };
+
+export const demoMatterList: MatterDemo[] = [
+  demoMatter,
+  {
+    id: 'matter-002',
+    title: 'Hamilton Vendor Discharge · Patel',
+    organisation: 'Kauri Coast Legal',
+    type: 'Individual vendor + discharge',
+    status: 'Draft',
+    settlementDate: '2026-05-26',
+    client: 'Patel',
+    lastUpdated: 'Updated 30 minutes ago',
+    reference: 'DEMO-002',
+    riskLevel: 'medium',
+    openQueueItems: 1
+  },
+  {
+    id: 'matter-003',
+    title: 'Trust Buyer Mortgage + CDD · Rimu Trust',
+    organisation: 'Harbour Chambers',
+    type: 'Trust buyer + mortgage + CDD',
+    status: 'Needs human review',
+    settlementDate: '2026-05-10',
+    client: 'Rimu Trust',
+    lastUpdated: 'Updated 4 minutes ago',
+    reference: 'DEMO-003',
+    riskLevel: 'high',
+    openQueueItems: 3
+  },
+  {
+    id: 'matter-004',
+    title: 'Trust Vendor Deed Variation · Tui Trustees',
+    organisation: 'Southern Legal',
+    type: 'Trust vendor + deed variation + discharge',
+    status: 'Ready for review',
+    settlementDate: '2026-06-03',
+    client: 'Tui Trustees',
+    lastUpdated: 'Updated 2 hours ago',
+    reference: 'DEMO-004',
+    riskLevel: 'low',
+    openQueueItems: 0
+  }
+];
 
 export const demoWorkflowSteps: WorkflowStep[] = [
   {

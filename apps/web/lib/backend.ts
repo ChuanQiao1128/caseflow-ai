@@ -1,4 +1,14 @@
-import { demoAuditLogs, demoChecklist, demoDocuments, demoEvidence, demoFields, demoMatter, demoQueueItems, demoReview } from '../data/demo-data';
+import {
+  demoAuditLogs,
+  demoChecklist,
+  demoDocuments,
+  demoEvidence,
+  demoFields,
+  demoMatter,
+  demoMatterList,
+  demoQueueItems,
+  demoReview
+} from '../data/demo-data';
 
 export type BackendHealth = {
   status: 'ok' | 'demo' | 'offline';
@@ -14,6 +24,9 @@ export type BackendMatter = {
   status: string;
   created_at: string;
   updated_at: string | null;
+  settlement_date?: string | null;
+  risk_level?: 'high' | 'medium' | 'low';
+  open_queue_items?: number;
 };
 
 export type BackendDocument = {
@@ -59,6 +72,8 @@ export type WorkspaceMatter = {
   client: string;
   lastUpdated: string;
   reference: string | null;
+  riskLevel?: 'high' | 'medium' | 'low';
+  openQueueItems?: number;
 };
 
 export type WorkspaceDocument = {
@@ -214,17 +229,18 @@ export async function loadBackendHealth(): Promise<BackendHealth> {
 export async function loadMatterList(): Promise<BackendMatter[]> {
   const context = getLiveContext();
   if (!context) {
-    return [
-      {
-        id: demoMatter.id,
-        organisation_id: 'demo-org',
-        reference: demoMatter.reference ?? 'DEMO-001',
-        title: demoMatter.title,
-        status: demoMatter.status,
-        created_at: new Date().toISOString(),
-        updated_at: null
-      }
-    ];
+    return demoMatterList.map((matter, index) => ({
+      id: matter.id,
+      organisation_id: `demo-org-${index + 1}`,
+      reference: matter.reference ?? `DEMO-00${index + 1}`,
+      title: matter.title,
+      status: matter.status,
+      created_at: new Date().toISOString(),
+      updated_at: null,
+      settlement_date: matter.settlementDate,
+      risk_level: matter.riskLevel,
+      open_queue_items: matter.openQueueItems ?? 0
+    }));
   }
 
   const response = await fetchOptionalJson<BackendMatter[]>(`/organisations/${context.organisationId}/matters`);
@@ -234,18 +250,23 @@ export async function loadMatterList(): Promise<BackendMatter[]> {
 export async function loadMatterById(matterId: string): Promise<BackendMatter | null> {
   const context = getLiveContext();
   if (!context) {
-    if (matterId === demoMatter.id) {
-      return {
-        id: demoMatter.id,
-        organisation_id: 'demo-org',
-        reference: demoMatter.reference ?? 'DEMO-001',
-        title: demoMatter.title,
-        status: demoMatter.status,
-        created_at: new Date().toISOString(),
-        updated_at: null
-      };
+    const demo = demoMatterList.find((item) => item.id === matterId);
+    if (!demo) {
+      return null;
     }
-    return null;
+
+    return {
+      id: demo.id,
+      organisation_id: 'demo-org',
+      reference: demo.reference ?? 'DEMO-001',
+      title: demo.title,
+      status: demo.status,
+      created_at: new Date().toISOString(),
+      updated_at: null,
+      settlement_date: demo.settlementDate,
+      risk_level: demo.riskLevel,
+      open_queue_items: demo.openQueueItems ?? 0
+    };
   }
 
   return fetchOptionalJson<BackendMatter>(`/organisations/${context.organisationId}/matters/${matterId}`);
@@ -322,7 +343,9 @@ export async function loadApprovalQueueForMatter(matterId: string): Promise<Work
   }));
 }
 
-function buildDemoWorkspace(): MatterWorkspaceState {
+function buildDemoWorkspace(matterId: string = demoMatter.id): MatterWorkspaceState {
+  const selectedDemoMatter = demoMatterList.find((item) => item.id === matterId) ?? demoMatter;
+
   return {
     backend: {
       status: 'demo',
@@ -330,9 +353,9 @@ function buildDemoWorkspace(): MatterWorkspaceState {
       detail: 'Synthetic data is active. Configure backend environment variables to connect live.'
     },
     mode: 'demo',
-    matter: { ...demoMatter, reference: demoMatter.reference ?? null },
+    matter: { ...selectedDemoMatter, reference: selectedDemoMatter.reference ?? null },
     documents: demoDocuments,
-    queueItems: demoQueueItems,
+    queueItems: demoQueueItems.map((item) => ({ ...item, matterId: selectedDemoMatter.id })),
     auditLogs: demoAuditLogs,
     analysis: {
       evidence: demoEvidence,
@@ -346,10 +369,7 @@ function buildDemoWorkspace(): MatterWorkspaceState {
 export async function loadMatterWorkspace(matterId: string): Promise<MatterWorkspaceState | null> {
   const backend = await loadBackendHealth();
   if (backend.status !== 'ok') {
-    if (matterId !== demoMatter.id && getLiveContext() === null) {
-      return buildDemoWorkspace();
-    }
-    return buildDemoWorkspace();
+    return buildDemoWorkspace(matterId);
   }
 
   const matter = await loadMatterById(matterId);
@@ -372,10 +392,12 @@ export async function loadMatterWorkspace(matterId: string): Promise<MatterWorks
       organisation: `Organisation ${matter.organisation_id.slice(0, 8)}`,
       type: 'Live backend matter',
       status: matter.status,
-      settlementDate: 'Not yet extracted',
+      settlementDate: matter.settlement_date ?? 'Not yet extracted',
       client: matter.reference ?? 'Live backend matter',
       lastUpdated: `Updated ${formatTimestamp(matter.updated_at ?? matter.created_at)}`,
-      reference: matter.reference
+      reference: matter.reference,
+      riskLevel: matter.risk_level,
+      openQueueItems: matter.open_queue_items
     },
     documents,
     queueItems,
@@ -425,10 +447,12 @@ export async function loadQueuePageState(): Promise<QueuePageState> {
       organisation: `Organisation ${selectedMatter.organisation_id.slice(0, 8)}`,
       type: 'Live backend matter',
       status: selectedMatter.status,
-      settlementDate: 'Not yet extracted',
+      settlementDate: selectedMatter.settlement_date ?? 'Not yet extracted',
       client: selectedMatter.reference ?? 'Live backend matter',
       lastUpdated: `Updated ${formatTimestamp(selectedMatter.updated_at ?? selectedMatter.created_at)}`,
-      reference: selectedMatter.reference
+      reference: selectedMatter.reference,
+      riskLevel: selectedMatter.risk_level,
+      openQueueItems: selectedMatter.open_queue_items
     },
     queueItems
   };
