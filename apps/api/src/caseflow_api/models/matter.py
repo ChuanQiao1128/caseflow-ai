@@ -10,6 +10,7 @@ from caseflow_api.database import Base
 from caseflow_api.models.base import TimestampMixin, UUIDPrimaryKeyMixin
 
 if TYPE_CHECKING:
+    from caseflow_api.models.approval_queue_item import ApprovalQueueItem
     from caseflow_api.models.document import Document
     from caseflow_api.models.organisation import Organisation
 
@@ -26,5 +27,8 @@ class Matter(UUIDPrimaryKeyMixin, TimestampMixin, Base):
 
     organisation: Mapped[Organisation] = relationship(back_populates="matters")
     documents: Mapped[list[Document]] = relationship(
+        back_populates="matter", cascade="all, delete-orphan"
+    )
+    approval_queue_items: Mapped[list[ApprovalQueueItem]] = relationship(
         back_populates="matter", cascade="all, delete-orphan"
     )

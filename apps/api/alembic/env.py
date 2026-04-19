@@ -5,6 +5,7 @@ from sqlalchemy import engine_from_config, pool
 from alembic import context
 from caseflow_api.database import Base
 from caseflow_api.models import (  # noqa: F401
+    ApprovalQueueItem,
     AuditLog,
     Document,
     DocumentChunk,

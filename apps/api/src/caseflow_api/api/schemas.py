@@ -172,3 +172,33 @@ class FollowUpEmailDraftRead(BaseModel):
         "This is a draft email only and must be reviewed and approved by a human before sending. "
         "It does not send anything automatically."
     )
+
+
+class ApprovalQueueItemRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    organisation_id: UUID
+    matter_id: UUID
+    item_type: Literal["follow_up_email_draft"]
+    status: Literal["pending", "approved", "rejected", "needs_changes"]
+    subject: str
+    body: str
+    reviewer_notes: str | None = None
+
+
+class ApprovalQueueItemCreate(BaseModel):
+    item_type: Literal["follow_up_email_draft"]
+    subject: str = Field(min_length=1)
+    body: str = Field(min_length=1)
+    source_item_id: str = Field(min_length=1)
+
+
+class ApprovalQueueActionRequest(BaseModel):
+    reviewer_notes: str | None = None
+
+
+class ApprovalQueueActionResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    item: ApprovalQueueItemRead
