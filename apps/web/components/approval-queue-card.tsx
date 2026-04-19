@@ -19,14 +19,14 @@ export function ApprovalQueueCard({ items, compact = false }: { items: ApprovalQ
                 <strong>{item.subject}</strong>
                 <p>{item.context}</p>
               </div>
-              <span className={`status status-${item.status}`}>{item.status}</span>
+              <span className={`status status-${item.status}`}>{item.status.replace('_', ' ')}</span>
             </div>
             <div className="queue-item-body">
               <span className="label">Reason</span>
               <p>{item.reason}</p>
             </div>
             <div className="queue-item-foot">
-              <span>{item.matterId}</span>
+              <span className="queue-id">{item.matterId}</span>
               <span>{item.updatedAt}</span>
             </div>
           </article>
