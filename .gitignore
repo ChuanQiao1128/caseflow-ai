@@ -1,9 +1,13 @@
 .env
 .env.*
 __pycache__/
+**/__pycache__/
 .pytest_cache/
+**/.pytest_cache/
 .mypy_cache/
+**/.mypy_cache/
 .ruff_cache/
+**/.ruff_cache/
 node_modules/
 .next/
 dist/
@@ -17,3 +21,6 @@ venv/
 synthetic-data/generated/
 storage/
 uploads/
+
+*.egg-info/
+**/*.egg-info/
